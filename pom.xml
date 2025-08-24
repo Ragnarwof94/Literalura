@@ -8,8 +8,8 @@
 		<version>3.5.4</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.literatura</groupId>
-	<artifactId>literatura</artifactId>
+	<groupId>com.literalura</groupId>
+	<artifactId>literalura</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>literatura</name>
 	<description>Catálogo de Libros LiterAlura</description>
