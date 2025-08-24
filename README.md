@@ -1,140 +1,216 @@
 📚 LiterAlura: Cliente de API Gutendex en Java
-Este proyecto implementa una aplicación de consola en Java 17 diseñada para interactuar con la API de Gutendex. Permite a los usuarios buscar, registrar y gestionar información de libros y autores, almacenándola en una base de datos local PostgreSQL.
+Este proyecto implementa una aplicación de consola en Java 17 que interactúa con la API de Gutendex para buscar y gestionar información de libros y autores. Permite a los usuarios buscar libros por título (con opciones de filtrado por idioma), registrar la información en una base de datos local (PostgreSQL) y consultar diversos datos almacenados sobre libros y autores.
 
-🌟 Características Destacadas
-Búsqueda Interactiva: Busca libros por título en la API de Gutendex, ofreciendo múltiples resultados para que el usuario seleccione y registre el deseado.
+🌟 Características
+Búsqueda y Selección de Libros: Permite buscar libros por título en la API de Gutendex, mostrando múltiples resultados para que el usuario elija cuál registrar.
 
-Filtrado por Idioma: Incluye una opción para filtrar los resultados de búsqueda de la API por un código de idioma específico (ej. "es", "en", "de").
+Filtrado por Idioma: Opción de filtrar los resultados de búsqueda de la API por un código de idioma específico (ej. "es", "en").
 
-Persistencia Robusta: Guarda libros y autores en una base de datos PostgreSQL mediante Spring Data JPA, evitando duplicados y gestionando la correcta asociación de autores.
+Consulta de Detalles: Muestra información relevante de los libros encontrados (título, autor, idiomas, número de descargas).
 
-Manejo Inteligente de Autores: Extrae y persiste la información del autor de la API, incluyendo sus años de nacimiento y fallecimiento, y gestiona los casos donde esta información es inconsistente o nula.
+Persistencia de Datos: Guarda y consulta libros y autores en una base de datos local (PostgreSQL) usando Spring Data JPA.
 
-Consultas Avanzadas: Permite listar todos los libros y autores registrados, buscar autores que estuvieron vivos en un año específico, y filtrar libros por idioma.
+Gestión de Autores: Identifica y persiste autores, evitando duplicados y gestionando casos donde la API no proporciona un nombre de autor válido.
 
-Interfaz de Consola Amigable: Toda la interacción se realiza a través de un menú sencillo y claro en la línea de comandos.
+Interfaz de Consola: Interacción sencilla a través de un menú en la línea de comandos para todas las funcionalidades.
 
-Gestión de Errores: Implementa un manejo de excepciones para abordar problemas de red, formato JSON de la API y conflictos de datos en la base de datos.
+Manejo de Errores: Incluye gestión de excepciones para problemas de comunicación con la API, formato de datos y duplicados en la base de datos.
 
 🛠️ Tecnologías Utilizadas
-Java 17+: Lenguaje principal de desarrollo.
+Java 17: Lenguaje de programación principal.
 
-Spring Boot: Framework que facilita la creación de aplicaciones Java autónomas y robustas.
+Spring Boot: Framework para el desarrollo de aplicaciones basadas en Spring, facilitando la configuración y el despliegue.
 
-spring-boot-starter-data-jpa: Para la capa de persistencia con el Java Persistence API (JPA).
+spring-boot-starter-data-jpa: Para la capa de persistencia con JPA.
 
-spring-boot-starter-validation: Para la validación de objetos (si se utilizan DTOs para la entrada de datos).
+spring-boot-starter-validation: Para la validación de datos (si se añaden DTOs).
 
-PostgreSQL: Sistema de gestión de bases de datos relacionales para el almacenamiento de datos.
+PostgreSQL: Sistema de gestión de bases de datos relacionales para persistencia local.
 
-Maven: Herramienta para la automatización de la construcción y la gestión de dependencias del proyecto.
+Maven: Herramienta de gestión de dependencias y construcción del proyecto.
 
-Gson: Librería de Google para la conversión eficiente de objetos Java a JSON y viceversa.
+Gson: Librería de Google para la serialización y deserialización de objetos Java a/desde JSON.
 
-Java 11+ HttpClient: Cliente HTTP nativo de Java para la comunicación con APIs externas.
+Java 11+ HttpClient: API nativa de Java para realizar solicitudes HTTP a la API externa.
 
-API Gutendex: Servicio RESTful público que proporciona acceso a los metadatos de Project Gutenberg.
+API Gutendex: API pública que proporciona un catálogo de libros y metadatos.
 
-🚀 Guía de Inicio Rápido
-Sigue estos pasos para poner en marcha el proyecto LiterAlura en tu entorno local.
+🚀 Cómo Empezar
+Sigue estos pasos para clonar, configurar y ejecutar la aplicación en tu entorno local.
 
 Requisitos Previos
-Asegúrate de tener instaladas las siguientes herramientas:
+JDK 17 o superior.
 
-Java Development Kit (JDK) 17 o una versión posterior ☕.
+Maven (generalmente incluido con los IDEs modernos como IntelliJ IDEA).
 
-Apache Maven 📦.
+IntelliJ IDEA (o tu IDE de preferencia).
 
-Un Entorno de Desarrollo Integrado (IDE) como IntelliJ IDEA 🖥️.
+PostgreSQL instalado y ejecutándose localmente (puerto por defecto 5432).
 
-Un servidor PostgreSQL en ejecución localmente (puerto 5432 por defecto) 🗄️.
-
-PgAdmin 4 o un cliente similar para la gestión de bases de datos.
+PgAdmin 4 (o cualquier cliente PostgreSQL) para gestionar la base de datos.
 
 1. Configuración de la Base de Datos
 Crea la base de datos:
 
 Abre PgAdmin 4 y conéctate a tu servidor PostgreSQL.
 
-Crea una nueva base de datos con el nombre exacto literalura_db. Asigna postgres como propietario.
+Crea una nueva base de datos llamada literalura_db. Asegúrate de que el propietario sea postgres (o tu usuario principal).
 
-Configura las credenciales:
+Configura las credenciales en application.properties:
 
-En tu proyecto, abre el archivo src/main/resources/application.properties.
+Crea (si no existe) o abre src/main/resources/application.properties en tu proyecto.
 
-Actualiza las siguientes líneas con la información de tu base de datos:
+Añade las siguientes líneas, reemplazando YOUR_DB_PASSWORD_HERE con tu contraseña de PostgreSQL:
 
 spring.datasource.url=jdbc:postgresql://localhost:5432/literalura_db
 spring.datasource.username=postgres
 spring.datasource.password=YOUR_DB_PASSWORD_HERE
 spring.datasource.driver-class-name=org.postgresql.Driver
-
 spring.jpa.hibernate.ddl-auto=update
 spring.jpa.show-sql=true
 spring.jpa.properties.hibernate.format_sql=true
 spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
 
-¡Importante! Reemplaza YOUR_DB_PASSWORD_HERE con la contraseña de tu usuario postgres en PostgreSQL.
-
-2. Preparación del Proyecto en tu IDE
-Clona el repositorio: Abre tu terminal (Git Bash, PowerShell, etc.) y ejecuta:
+2. Configuración del Proyecto en tu IDE
+Clona el repositorio:
 
 git clone https://github.com/tu_usuario/LiterAlura.git
 cd LiterAlura
 
-(Asegúrate de reemplazar tu_usuario con tu nombre de usuario real de GitHub).
+(Reemplaza tu_usuario con tu nombre de usuario de GitHub).
 
-Abre el proyecto en tu IDE:
+Abrir el proyecto en tu IDE:
 
-Inicia IntelliJ IDEA y selecciona "Open" o "Abrir".
+Abre tu IDE (ej. IntelliJ IDEA).
 
-Navega a la carpeta LiterAlura que clonaste y ábrela.
+Selecciona "Open" o "Abrir" y navega hasta la carpeta LiterAlura que acabas de clonar/crear.
 
-El IDE debería reconocer el proyecto Maven y descargar automáticamente todas las dependencias.
+Tu IDE debería detectar automáticamente que es un proyecto Maven e importar las dependencias.
 
-Recarga y Reconstruye:
+Recarga las dependencias de Maven: Asegúrate de que tu IDE descargue todas las librerías necesarias (especificadas en pom.xml).
+
+Limpia y reconstruye el proyecto:
 
 En tu IDE, ve a Build -> Clean Project.
 
-Luego, Build -> Rebuild Project. Esto asegura que todos los componentes se compilen correctamente.
+Luego, Build -> Rebuild Project.
 
-3. Ejecución de la Aplicación
-Localiza la clase principal: Ve a src/main/java/com/literalura/literalura/LiterAluraApplication.java.
+3. Ejecutar la Aplicación
+En tu IDE, navega a la clase principal: LiterAluraApplication.java (ubicada en src/main/java/com/literalura/literalura/).
 
-Ejecuta el método main: Haz clic derecho dentro del código de esta clase y selecciona "Run 'LiterAluraApplication.main()'".
+Haz clic derecho en el método main y selecciona "Run 'LiterAluraApplication.main()'".
 
-La aplicación se iniciará en la consola de tu IDE, presentando un menú interactivo.
+La aplicación se ejecutará en la ventana de la consola de tu IDE, mostrando el menú interactivo.
 
-🗺️ Uso de la Aplicación (Desde la Consola)
-Una vez que la aplicación esté en ejecución, interactúa con ella a través del menú de la consola:
+📊 Flujo de la Aplicación
+flowchart TD
+    style A fill:#fdf6e3,stroke:#268bd2,stroke-width:2px
+    style B fill:#eee8d5,stroke:#2aa198
+    style C fill:#eee8d5,stroke:#859900
+    style D fill:#eee8d5,stroke:#b58900
+    style E fill:#eee8d5,stroke:#cb4b16
+    style F fill:#eee8d5,stroke:#6c71c4
+    style G fill:#eee8d5,stroke:#d33682
+    style H fill:#eee8d5,stroke:#268bd2
+    style I fill:#eee8d5,stroke:#2aa198
+    style J fill:#eee8d5,stroke:#859900
+    style K fill:#eee8d5,stroke:#b58900
 
-Buscar libro por título: Ingresa un título de libro. La aplicación consultará la API de Gutendex, te permitirá filtrar por idioma y te mostrará una lista de hasta 10 opciones para que selecciones el libro deseado a registrar.
+    A[📚 **LiterAlura: Cliente de API Gutendex**] --> B[🔧 **Requisitos Previos**]
+    B --> B1[JDK 17+ ☕]
+    B --> B2[Maven 📦]
+    B --> B3[IntelliJ IDEA u otro IDE 🖥️]
+    B --> B4[PostgreSQL en ejecución 🗄️]
+    B --> B5[PgAdmin u otro cliente]
 
-Listar libros registrados: Muestra todos los libros que has guardado previamente en tu base de datos local, con sus detalles completos.
+    A --> C[1️⃣ **Configurar Base de Datos**]
+    C --> C1[Archivo: src/main/resources/application.properties]
+    C1 --> C2[spring.datasource.url=jdbc:postgresql://localhost:5432/literalura_db]
+    C1 --> C3[spring.datasource.username=postgres]
+    C1 --> C4[spring.datasource.password=tu_contraseña]
+    C1 --> C5[spring.jpa.hibernate.ddl-auto=update]
+    C1 --> C6[spring.jpa.show-sql=true]
 
-Listar autores registrados: Presenta una lista de todos los autores únicos almacenados en tu base de datos, excluyendo cualquier entrada de "Desconocido".
+    A --> D[2️⃣ **Clonar y Configurar Proyecto**]
+    D --> D1[git clone https://github.com/tu_usuario/LiterAlura.git]
+    D --> D2[cd LiterAlura]
+    D --> D3[Abrir proyecto en IDE 🖥️]
+    D --> D4[Dejar que Maven descargue dependencias 📦]
+    D --> D5[Limpia y reconstruye el proyecto 🔨]
 
-Listar autores vivos en un determinado año: Ingresa un año y la aplicación te mostrará los autores que, según sus años de nacimiento y fallecimiento, estaban vivos en ese periodo.
+    A --> E[3️⃣ **Ejecutar la Aplicación**]
+    E --> E1[Abrir LiterAluraApplication.java]
+    E --> E2[Ejecutar método main ▶️]
+    E --> E3[Usar menú interactivo 📝]
 
-Listar libros por idioma: Ingresa un código de idioma (ej. "es", "en", "de") y la aplicación filtrará y mostrará los libros registrados en ese idioma.
+    E3 --> F[📋 **Opciones de Menú**]
+    F --> F1[🔍 Buscar libro por título (filtrar por idioma)]
+    F --> F2[📖 Listar libros registrados]
+    F --> F3[✍️ Listar autores registrados]
+    F --> F4[👤 Listar autores vivos en un año específico]
+    F --> F5[🌐 Listar libros por idioma]
+    F --> F6[❌ Salir de la aplicación]
 
-Salir: Finaliza la ejecución de la aplicación.
+    A --> G[💾 **Persistencia Local**]
+    G --> G1[PostgreSQL con Spring Data JPA]
+    G --> G2[Evita duplicados de libros y autores]
+    G --> G3[Manejo de autores “Desconocido”]
 
-💡 Posibles Mejoras Futuras
-Soporte Multi-Autor: Implementar un modelo de datos más complejo para gestionar múltiples autores por libro, reflejando con mayor precisión los datos de la API.
+    A --> H[🧩 **Modelo de Datos**]
+    H --> H1[BOOKS]
+    H1 --> H1a[id PK]
+    H1 --> H1b[title]
+    H1 --> H1c[download_count]
+    H --> H2[AUTHORS]
+    H2 --> H2a[id PK]
+    H2 --> H2b[name]
+    H2 --> H2c[birth_year]
+    H2 --> H2d[death_year]
+    H --> H3[BOOK_LANGUAGES]
+    H3 --> H3a[book_id FK]
+    H3 --> H3b[language]
+    AUTHORS ||--o{ BOOKS : "escribe"
+    BOOKS ||--o{ BOOK_LANGUAGES : "se traduce a"
 
-Transformación a API REST o GUI: Evolucionar la aplicación de consola a una API REST (usando spring-boot-starter-web) para permitir su integración con otras aplicaciones, o desarrollar una Interfaz Gráfica de Usuario (GUI) con JavaFX o Swing.
+    A --> I[💡 **Posibles Mejoras**]
+    I --> I1[Manejo de múltiples autores por libro 📚]
+    I --> I2[Autenticación/seguridad multiusuario 🔐]
+    I --> I3[Reportes estadísticos 📊]
+    I --> I4[Documentación automática Swagger/OpenAPI 📝]
+    I --> I5[Tests unitarios e integración ✅]
 
-Reportes y Estadísticas: Añadir funcionalidades para generar reportes sobre los datos almacenados, como el número de libros por idioma, por autor, o los autores más prolíficos.
+    A --> J[🤝 **Contribuciones**]
+    J --> J1[Abrir issue o pull request]
 
-Pruebas Automatizadas: Incorporar tests unitarios y de integración para asegurar la calidad y el correcto funcionamiento del código.
+    A --> K[📄 **Licencia**]
+    K --> K1[MIT]
+
+🗺️ Uso de la Aplicación (Consola)
+Una vez que la aplicación esté corriendo, verás un menú en la consola. Sigue las opciones para interactuar:
+
+Buscar libro por título: Busca un libro en la API de Gutendex. Te preguntará si deseas filtrar por idioma y luego te mostrará una lista para que elijas cuál registrar.
+
+Listar libros registrados: Muestra los libros que ya has guardado en tu base de datos local.
+
+Listar autores registrados: Muestra todos los autores únicos (excluyendo "Desconocido") guardados en tu base de datos local.
+
+Listar autores vivos en un determinado año: Permite consultar autores que estaban vivos en un año específico según sus años de nacimiento y fallecimiento, excluyendo "Desconocido".
+
+Listar libros por idioma: Filtra y muestra los libros guardados en la base de datos por un código de idioma (ej. "es", "en").
+
+Salir: Termina la ejecución de la aplicación.
+
+💡 Posibles Mejoras
+Manejo de Múltiples Autores por Libro: Aunque la API puede devolver varios autores, actualmente se asocia solo el primero. Se podría mejorar la lógica para guardar y gestionar múltiples autores por libro.
+
+Interfaz Gráfica o API REST: Convertir la aplicación a una interfaz gráfica de usuario (GUI) o exponer las funcionalidades como una API REST (utilizando spring-boot-starter-web) para permitir la interacción desde otras aplicaciones o Insomnia.
+
+Manejo de Errores de API más robusto: Ofrecer mensajes más amigables si la API Gutendex no responde o devuelve errores.
+
+Tests Unitarios e Integración: Implementar pruebas para asegurar la correcta funcionalidad de cada componente.
 
 🤝 Contribuciones
-¡Las contribuciones son siempre bienvenidas! Si tienes ideas para mejorar o expandir LiterAlura, no dudes en:
-
-Abrir un issue en el repositorio para reportar errores o sugerir nuevas características.
-
-Enviar un pull request con tus propias implementaciones y mejoras.
+¡Las contribuciones son bienvenidas! Si tienes ideas para mejorar LiterAlura, no dudes en abrir un "issue" o enviar un "pull request".
 
 📄 Licencia
-Este proyecto se distribuye bajo la Licencia MIT. Puedes encontrar los detalles completos en el archivo LICENSE en la raíz del repositorio.
+Este proyecto está bajo la Licencia MIT. Consulta el archivo LICENSE para más detalles.
