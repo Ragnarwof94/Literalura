@@ -73,7 +73,7 @@ Asegúrate de tener instaladas las siguientes herramientas:
    **Bash**
 
    ```
-   git clone https://github.com/tu_usuario/LiterAlura.git
+   git clone https://github.com/tu_usuario/Literalura.git
    cd LiterAlura
    ```
 
